@@ -10,5 +10,3 @@ routes, basic sequelizer
 
 application of recently learned technologies: handlebars, manage user sessions etc
 
-
-## further application spec is required
