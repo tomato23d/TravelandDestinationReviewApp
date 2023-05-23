@@ -1,0 +1,45 @@
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/connection');
+
+class Review extends Model {}
+
+Review.init(
+
+{
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    review_text: {
+        type: DataTypes.STRING
+    },
+    rate: {
+        type: DataTypes.INTEGER
+    },
+    place_id: {
+        type: DataTypes.INTEGER
+    },
+    place: {
+        type: DataTypes.STRING
+    },
+    traveller_id: {
+        type: DataTypes.INTEGER
+    },
+    traveller: {
+        type: DataTypes.STRING
+    },
+    traveller_email: {
+        type: DataTypes.STRING
+    }
+
+},
+{   sequelize,
+    timestamps: false,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'review'
+  }
+);
+
+module.exports = Review;
