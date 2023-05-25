@@ -1,3 +1,3 @@
-  drop database if exists reviews2_db;
-  create database reviews2_db;
+  drop database if exists reviews4_db;
+  create database reviews4_db;
 

@@ -17,20 +17,23 @@ Review.init(
     rate: {
         type: DataTypes.INTEGER
     },
+   
+   traveller_id: {
+        type: DataTypes.INTEGER
+    },
+    // traveller: {
+    //     type: DataTypes.STRING
+    // },
+    // traveller_email: {
+    //     type: DataTypes.STRING
+    // },
+
     place_id: {
-        type: DataTypes.INTEGER
-    },
-    place: {
-        type: DataTypes.STRING
-    },
-    traveller_id: {
-        type: DataTypes.INTEGER
-    },
-    traveller: {
-        type: DataTypes.STRING
-    },
-    traveller_email: {
-        type: DataTypes.STRING
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'place',
+            key: 'id',
+        }
     }
 
 },

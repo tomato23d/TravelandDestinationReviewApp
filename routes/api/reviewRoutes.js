@@ -1,67 +1,52 @@
 const router = require('express').Router();
-//const fs = require('fs');
+
 
 // Import the model
-const Review = require('../../models/review');
+const { Review, Place } = require('../../models');
 
-/// post on router require fix
+/// create review 
 router.post('/', async (req, res) => {
-  const reviewData = await Review.create(req.body);
-
-  return res.json(reviewData);
-});
-
-
-
-//   Review.create({
-//     review_text: req.body.review_text,
-//     rate: req.body.rate,
-//     place_id: req.body.place_id,
-//     traveller_id: req.body.traveller_id
-//   })
-
-
-//select rate//disable for a sec
-// router.get('/:rate', (req, res) => {
-
-//   Review.findAll(
-//     {
-//       order: ['traveller_id'],
-//       where: { 
-//         rate: req.params.rate 
-//       },
-//       //attributes: {
-//         //     //   exclude: ['is_paperback', 'edition'],
-//         //     // },
-//     }
-//   ).then((data) => {
-//     res.json(data);
-//   });
-// });
-/////////////////////////////
-
-//select place
-router.get('/:place', (req, res) => {
-
-  Review.findAll(
-    {
-      order: ['id'],
-      where: { 
-        place: req.params.place 
-      },
+  try {
+    const reviewData = await Review.create({
+      place_id: req.body.place_id,
+      review_text: req.body.review_text,
+      rate: req.body.rate,
+      traveller_id: req.body.traveller_id
+    });
+    res.status(200).json(reviewData);
+    } catch (err) {
+      res.status(400).json(err);
     }
-  ).then((data) => {
-    res.json(data);
-  });
 });
 
 
-
+/////////////////////////////
+router.get('/:place', async (req, res) => {
+  try{
+  const place = await Place.findOne({
+    where: {place_name: req.params.place}
+  });
+    const review = await Review.findAll({ where: {place_id: place.id},
+      include: [{ model: Place}]});
+  //console.log(review);
+  res.status(200).json(review);
+} catch (err) {
+  res.status(400).json(err);
+}
+});
 
 //////////////////////////////
 router.get('/', async (req, res) => {
-  const data = await Review.findAll();
-  return res.json(data);
+  try {
+    const data = await Review.findAll({
+      include: [{ model: Place }],
+  });
+  
+  res.status(200).json(data);
+
+} catch (err) {
+  res.status(500).json(err);
+}
 });
 
 

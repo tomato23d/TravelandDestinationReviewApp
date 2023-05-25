@@ -4,36 +4,35 @@ console.log(timeStamp);
 
 function submitReview(){
 const userNameInput = document.getElementById('traveller');
-const userNumberInput = document.getElementById('traveller_id');
 const userEmailInput = document.getElementById('traveller_email');
 
 
-const placeInput = document.getElementById('place');
-const placeNumberInput = document.getElementById('place_id');
 
+///inputs////
 const reviewInput = document.getElementById('review');
 const rateInput = document.getElementById('rate');
+const userNumberInput = document.getElementById('traveller_id');
+const placeInput = document.getElementById('place_name');
 
+const placeNumberInput = document.getElementById('place_id');
+
+////forms///
 const placeSearchInput = document.getElementById('search-place');
-
-
-
-
 const reviewForm = document.getElementById('review-form');
 const searchInputForm = document.getElementById('search-input');
 
+///buttons///
 const reviewShowBtn = document.getElementById('show-review');
-const reviewOutput = document.getElementById('show');
-
 const rateShowBtn = document.getElementById('show-rate');
+
+
+const reviewOutput = document.getElementById('show');
 
 
 searchInputForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
   var findPlace = placeSearchInput.value.trim();
   console.log(findPlace);
-  // getPlaceReviews(findPlace);
-  // renderReviews(id);
   getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
   });
 
@@ -75,19 +74,20 @@ reviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const newReview = {
-    traveller_id: userNumberInput.value.trim(),
-	  traveller: userNameInput.value.trim(),
-    traveller_email: userEmailInput.value.trim(),
-    place: placeInput.value.trim(),
-    place_id: placeNumberInput.value.trim(),
     review_text: reviewInput.value.trim(),
     rate: rateInput.value.trim(),
+    traveller_id: userNumberInput.value.trim(),
+    place_id: placeNumberInput.value.trim()
+
+	  // traveller: userNameInput.value.trim(),
+    // traveller_email: userEmailInput.value.trim(),
+    // place: placeInput.value.trim(),
   };
 
   
 
   postReview(newReview)
-    .then((data) => alert(`Review added! Review ID: ${data.body.review_id}`))
+    .then((data) => alert(`Review added! Review ID: ${data.body.id}`))
     .catch((err) => console.error(err));
 
   
@@ -100,6 +100,7 @@ const getReviews = async () => {
     method: 'GET',
   });
   const json = await result.json();
+ // console.log(json);
   return json;
 };
 
@@ -116,32 +117,12 @@ const renderReviews = (id) => {
 
     review.innerText = id.review_text;
     rate.innerText = id.rate;
-    place.innerHTML = `<a href=${id.place_url}>${id.place}</a>`;
+    place.innerHTML = `<a href=${id.place.place_url}>${id.place.place_name}</a>`;
     review.appendChild(rate);
     place.appendChild(review);
     reviewOutput.appendChild(place);
   
 };
-
-// const renderPlaceReviews = (????) => {
-//   const review = document.createElement('td');
-//   const rate = document.createElement('p');
-//   const place = document.createElement('tr');
-
-//   place.classList.add('jumbotron2');
-//   review.classList.add('jumbotron2');
-//   rate.classList.add('jumbotron2');
-
-//   review.innerText = review_id.review_text;
-//   rate.innerText = review_id.rate;
-//   place.innerHTML = `<a href=${review_id.place_url}>${review_id.place}</a>`;
-//   review.appendChild(rate);
-//   place.appendChild(review);
-//   reviewOutput.appendChild(place);
-
-// };
-
-
 
 
 const getAndRender = () =>
