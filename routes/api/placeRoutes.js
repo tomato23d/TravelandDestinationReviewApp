@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 // Import the model
-const { Place, Review } = require('../../models');
+const { Place, Review, Traveller } = require('../../models');
 
 
 router.post('/', async (req, res) => {
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const data = await Place.findAll({
-      include: [{ model: Review}],
+      include: [{ model: Review} , { model: Traveller}],
     });
     res.status(200).json(data);
     } catch (err) {

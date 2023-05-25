@@ -19,15 +19,13 @@ Review.init(
     },
    
    traveller_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'traveller',
+            key: 'id',
+        }
     },
-    // traveller: {
-    //     type: DataTypes.STRING
-    // },
-    // traveller_email: {
-    //     type: DataTypes.STRING
-    // },
-
+    
     place_id: {
         type: DataTypes.INTEGER,
         references: {

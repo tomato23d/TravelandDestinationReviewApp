@@ -3,15 +3,15 @@ var timeStamp = dayjs().format('D.MMMM.YYYY_H:mm');
 console.log(timeStamp);
 
 function submitReview(){
-const userNameInput = document.getElementById('traveller');
-const userEmailInput = document.getElementById('traveller_email');
+//const userNameInput = document.getElementById('traveller');
+//const userEmailInput = document.getElementById('traveller_email');
 
 
 
 ///inputs////
 const reviewInput = document.getElementById('review');
 const rateInput = document.getElementById('rate');
-const userNumberInput = document.getElementById('traveller_id');
+//const userNumberInput = document.getElementById('traveller_id');
 const placeInput = document.getElementById('place_name');
 
 const placeNumberInput = document.getElementById('place_id');
@@ -76,11 +76,11 @@ reviewForm.addEventListener('submit', (e) => {
   const newReview = {
     review_text: reviewInput.value.trim(),
     rate: rateInput.value.trim(),
-    traveller_id: userNumberInput.value.trim(),
+    //traveller_id: userNumberInput.value.trim(),
+    traveller_id: 1,
     place_id: placeNumberInput.value.trim()
 
-	  // traveller: userNameInput.value.trim(),
-    // traveller_email: userEmailInput.value.trim(),
+	 
     // place: placeInput.value.trim(),
   };
 
