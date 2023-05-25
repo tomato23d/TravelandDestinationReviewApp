@@ -15,4 +15,3 @@ get an existing review with the search by destination place (city or else)
 
 application of recently learned technologies: handlebars, manage user sessions etc
 
-
