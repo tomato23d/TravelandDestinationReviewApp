@@ -8,11 +8,13 @@ const { Review, Place, Traveller } = require('../../models');
 router.post('/', async (req, res) => {
   try {
     const placeInput = await Place.findOne({
-      where: {place_name: req.params.place}
+      where: {place_name: req.body.place_name}
     });
-    console.log(placeInput);
+    console.log("line 13:  " + placeInput);
+    const placeInputPlain = placeInput.get({plain:true});
+    console.log("line 15:  " + placeInputPlain);
     const reviewData = await Review.create({
-      place_id: req.body.placeInput.id,
+      place_id: placeInputPlain.id,
       review_text: req.body.review_text,
       rate: req.body.rate,
       //traveller_id: req.body.traveller_id
