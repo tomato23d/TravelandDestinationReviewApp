@@ -16,10 +16,14 @@ const placeInput = document.getElementById('place_name');
 
 const placeNumberInput = document.getElementById('place_id');
 
+const placeCreate = document.getElementById('create-place');
+
 ////forms///
 const placeSearchInput = document.getElementById('search-place');
 const reviewForm = document.getElementById('review-form');
 const searchInputForm = document.getElementById('search-input');
+
+const createPlaceForm = document.getElementById('form-create-place')
 
 ///buttons///
 const reviewShowBtn = document.getElementById('show-review');
@@ -28,11 +32,53 @@ const rateShowBtn = document.getElementById('show-rate');
 
 const reviewOutput = document.getElementById('show');
 
+///////////////////////
+createPlaceForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  var placeCreated = placeCreate.value.trim();
+
+
+    const newPlace = {
+      place_name: placeCreated,
+      place_url: "www.google.com",
+      place_type: "active"
+};
+console.log("place to create: " + newPlace);
+
+postPlace(newPlace);
+})
+
+
+
+const postPlace = (place) =>
+  
+  fetch('/api/places', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(place),
+
+  })
+ 
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('Successful POST Place request:', data);
+      //JSON.stringify(place) is a string record without id
+      //data is record with id and unquoted record fields
+      return data;
+    })
+    .catch((error) => {
+      console.error('Error in POST request:', error);
+    });
+
+
+////////////////////
 
 searchInputForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
   var findPlace = placeSearchInput.value.trim();
-  console.log(findPlace);
+  console.log("place to find: " + findPlace);
   getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
   });
 
@@ -44,7 +90,7 @@ const getPlaceReviews = async (findPlace) => {
   });
 
   const json = await result.json();
-  console.log(json);
+  //console.log(json);
   return json;
 };
 
@@ -62,7 +108,7 @@ const postReview = (review) =>
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log('Successful POST request:', data);
+      console.log('Successful POST Review request:', data);
       return data;
     })
     .catch((error) => {
@@ -82,7 +128,7 @@ reviewForm.addEventListener('submit', (e) => {
     place_name: placeInput.value.trim(),
   };
 
-  console.log(newReview);
+  //console.log(newReview);
 
   postReview(newReview)
    

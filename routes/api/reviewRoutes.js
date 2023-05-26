@@ -10,9 +10,9 @@ router.post('/', async (req, res) => {
     const placeInput = await Place.findOne({
       where: {place_name: req.body.place_name}
     });
-    console.log("line 13:  " + placeInput);
+    //console.log(placeInput);
     const placeInputPlain = placeInput.get({plain:true});
-    console.log("line 15:  " + placeInputPlain);
+   // console.log(placeInputPlain);
     const reviewData = await Review.create({
       place_id: placeInputPlain.id,
       review_text: req.body.review_text,
@@ -38,7 +38,7 @@ router.get('/:place', async (req, res) => {
   //console.log(review);
   res.status(200).json(review);
 } catch (err) {
-  res.status(400).json(err);
+  res.status(500).json(err);
 }
 });
 
