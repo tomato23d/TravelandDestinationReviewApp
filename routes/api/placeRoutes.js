@@ -28,6 +28,21 @@ router.get('/', async (req, res) => {
 }
 });
 
+// requires testing
+router.get('/:place', async (req, res) => {
+  try {
+    const place = await Place.findOne({
+      where: {place_name: req.params.place}
+    });
+    const placeOne = place.get({plain:true});
+   // console.log(placeOne);
+    res.status(200).json(placeOne);
+} catch (err) {
+  res.status(500).json(err);
+}
+});
+
+
 
 
 

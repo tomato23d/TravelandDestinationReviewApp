@@ -32,7 +32,7 @@ const rateShowBtn = document.getElementById('show-rate');
 
 const reviewOutput = document.getElementById('show');
 
-///////////////////////
+/////create new place - test/////////////
 createPlaceForm.addEventListener('submit', (e) => {
   e.preventDefault();
   var placeCreated = placeCreate.value.trim();
@@ -47,7 +47,6 @@ console.log("place to create: " + newPlace);
 
 postPlace(newPlace);
 })
-
 
 
 const postPlace = (place) =>
@@ -72,9 +71,9 @@ const postPlace = (place) =>
       console.error('Error in POST request:', error);
     });
 
+//////////create new place - test >>>>>>>
 
-////////////////////
-
+//////////search bar and get ///////
 searchInputForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
   var findPlace = placeSearchInput.value.trim();
@@ -82,8 +81,6 @@ searchInputForm.addEventListener('submit', (e) => {
   getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
   });
 
-
-//test render
 const getPlaceReviews = async (findPlace) => {
   const result = await fetch(`/api/reviews/${findPlace}`, {
     method: 'GET',
@@ -94,8 +91,9 @@ const getPlaceReviews = async (findPlace) => {
   return json;
 };
 
+//////////search bar >>>>>>>>
 
-  ///////
+/////////// post review on form //////////////
 
 const postReview = (review) =>
   
@@ -119,6 +117,28 @@ const postReview = (review) =>
 reviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
+  var cPlace = placeInput.value.trim();
+//// check if placeInput exists in Place Model
+// if yes - go to const newReview
+// if no - run postPlace and return
+  console.log("line 123: " + cPlace);
+
+// query Place model with the place input
+ const getPlace = async (cPlace) => {
+  const result = await fetch(`/api/places/${cPlace}`, {
+    method: 'GET',
+  });
+
+  const json = await result.json();
+  console.log(json);
+  var cPlaceDB = place_name.value.trim();
+  console.log(cPlaceDB);
+  return json;
+};
+// match place input with get place from DB 
+if(cPlace != cPlaceDB){postPlace(cPlace)};
+
+
   const newReview = {
     review_text: reviewInput.value.trim(),
     rate: parseInt(rateInput.value.trim()),
@@ -131,11 +151,14 @@ reviewForm.addEventListener('submit', (e) => {
   //console.log(newReview);
 
   postReview(newReview)
+  getPlace(cPlace);
    
     //localStorage.setItem(timeStamp, JSON.stringify(newReview));
 });
 
-//render existing reviews
+/////////// post review on form >>>>>>>>>>>>>>>
+
+/////render ALL existing reviews ////
 const getReviews = async () => {
   const result = await fetch('/api/reviews', {
     method: 'GET',
@@ -167,11 +190,11 @@ const renderReviews = (id) => {
 
 
 const getAndRender = () =>
-  
   getReviews().then((response) => response.forEach((id) => renderReviews(id)));
 
-
 reviewShowBtn.addEventListener('click', getAndRender);
+
+/////render ALL existing reviews >>>>>>>>>>>>>>>.
 };
 
 submitReview();
