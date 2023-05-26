@@ -117,26 +117,26 @@ const postReview = (review) =>
 reviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  var cPlace = placeInput.value.trim();
-//// check if placeInput exists in Place Model
-// if yes - go to const newReview
-// if no - run postPlace and return
-  console.log("line 123: " + cPlace);
+//   var cPlace = placeInput.value.trim();
+// //// check if placeInput exists in Place Model
+// // if yes - go to const newReview
+// // if no - run postPlace and return
+//   console.log("line 123: " + cPlace);
 
-// query Place model with the place input
- const getPlace = async (cPlace) => {
-  const result = await fetch(`/api/places/${cPlace}`, {
-    method: 'GET',
-  });
+// // query Place model with the place input
+//  const getPlace = async (cPlace) => {
+//   const result = await fetch(`/api/places/${cPlace}`, {
+//     method: 'GET',
+//   });
 
-  const json = await result.json();
-  console.log(json);
-  var cPlaceDB = place_name.value.trim();
-  console.log(cPlaceDB);
-  return json;
-};
-// match place input with get place from DB 
-if(cPlace != cPlaceDB){postPlace(cPlace)};
+//   const json = await result.json();
+//   console.log(json);
+//   var cPlaceDB = place_name.value.trim();
+//   console.log(cPlaceDB);
+//   return json;
+// };
+// // match place input with get place from DB 
+// if(cPlace != cPlaceDB){postPlace(cPlace)};
 
 
   const newReview = {
@@ -151,7 +151,7 @@ if(cPlace != cPlaceDB){postPlace(cPlace)};
   //console.log(newReview);
 
   postReview(newReview)
-  getPlace(cPlace);
+ // getPlace(cPlace);
    
     //localStorage.setItem(timeStamp, JSON.stringify(newReview));
 });
@@ -164,7 +164,7 @@ const getReviews = async () => {
     method: 'GET',
   });
   const json = await result.json();
- // console.log(json);
+  console.log(json);
   return json;
 };
 
@@ -180,6 +180,7 @@ const renderReviews = (id) => {
     rate.classList.add('jumbotron2');
 
     review.innerText = id.review_text;
+    //rate.innerText = id.averageRate;
     rate.innerText = id.rate;
     place.innerHTML = `<a href=${id.place.place_url}>${id.place.place_name}</a>`;
     review.appendChild(rate);

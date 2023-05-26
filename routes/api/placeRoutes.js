@@ -44,6 +44,4 @@ router.get('/:place', async (req, res) => {
 
 
 
-
-
 module.exports = router;

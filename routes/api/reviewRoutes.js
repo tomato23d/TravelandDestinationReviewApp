@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const sequelize = require('../../config/connection');
 
 
 // Import the model
@@ -17,13 +18,56 @@ router.post('/', async (req, res) => {
       place_id: placeInputPlain.id,
       review_text: req.body.review_text,
       rate: req.body.rate,
-      //traveller_id: req.body.traveller_id
       traveller_id: 1
     });
     res.status(200).json(reviewData);
     } catch (err) {
       res.status(400).json(err);
     }
+});
+
+///////// add average rate to get All router
+router.get('/', async (req, res) => {
+  try {
+    const data = await Review.findAll({
+      include: [{ model: Place }, { model: Traveller}],
+      attributes:{
+        include:[
+          sequelize.fn('AVG',sequelize.col('rate')), 'rate'
+        ]
+      },
+      group: ["place_id"]
+      
+  //     attributes: {
+  //       include: [
+  //         [
+  //       sequelize.literal(`(SELECT distinct(place_id), avg(rate)  FROM review group by place_id`), 'averageRate']
+  //         ]
+  // }
+});
+  console.log(data);
+  res.status(200).json(data);
+
+} catch (err) {
+  console.log(err)
+  res.status(500).json(err);
+}
+});
+
+
+
+//////////////////////////////
+router.get('/', async (req, res) => {
+  try {
+    const data = await Review.findAll({
+      include: [{ model: Place }, { model: Traveller}],
+  });
+  
+  res.status(200).json(data);
+
+} catch (err) {
+  res.status(500).json(err);
+}
 });
 
 
@@ -42,19 +86,10 @@ router.get('/:place', async (req, res) => {
 }
 });
 
-//////////////////////////////
-router.get('/', async (req, res) => {
-  try {
-    const data = await Review.findAll({
-      include: [{ model: Place }, { model: Traveller}],
-  });
-  
-  res.status(200).json(data);
 
-} catch (err) {
-  res.status(500).json(err);
-}
-});
+
+
+
 
 
 module.exports = router;
