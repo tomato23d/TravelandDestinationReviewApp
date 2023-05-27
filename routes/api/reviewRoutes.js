@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 
+const { QueryTypes } = require('@sequelize/core');
+
 
 // Import the model
 const { Review, Place, Traveller } = require('../../models');
@@ -24,34 +26,6 @@ router.post('/', async (req, res) => {
     } catch (err) {
       res.status(400).json(err);
     }
-});
-
-///////// add average rate to get All router
-router.get('/', async (req, res) => {
-  try {
-    const data = await Review.findAll({
-      include: [{ model: Place }, { model: Traveller}],
-      attributes:{
-        include:[
-          sequelize.fn('AVG',sequelize.col('rate')), 'rate'
-        ]
-      },
-      group: ["place_id"]
-      
-  //     attributes: {
-  //       include: [
-  //         [
-  //       sequelize.literal(`(SELECT distinct(place_id), avg(rate)  FROM review group by place_id`), 'averageRate']
-  //         ]
-  // }
-});
-  console.log(data);
-  res.status(200).json(data);
-
-} catch (err) {
-  console.log(err)
-  res.status(500).json(err);
-}
 });
 
 
@@ -87,9 +61,27 @@ router.get('/:place', async (req, res) => {
 });
 
 
+/////average review rate///////////////////////
+router.get('/:place/rate', async (req, res) => {
+  try{
+  const rates = await sequelize.query('SELECT distinct(review.place_id), place.place_name, avg(review.rate) as AveRate FROM review, place where review.place_id = place.id group by review.place_id;', 
+  { type: sequelize.QueryTypes.SELECT });
+  res.status(200).json(rates);
+} catch (err) {
+  res.status(500).json(err);
+}
+});
 
 
-
+// ////////average review rate - alternative////////////////////////
+// router.get('/:place/rate', async (req, res) => {
+//   try{
+//     const [results, metadata] = await sequelize.query('SELECT distinct(place_id), avg(rate) as AveRate FROM review group by place_id', { raw: true }); 
+//     res.status(200).json(results);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+//   });
 
 
 module.exports = router;

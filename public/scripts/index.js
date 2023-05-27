@@ -3,12 +3,12 @@ var timeStamp = dayjs().format('D.MMMM.YYYY_H:mm');
 console.log(timeStamp);
 
 function submitReview(){
+
 //const userNameInput = document.getElementById('traveller');
 //const userEmailInput = document.getElementById('traveller_email');
 
 
-
-///inputs////
+///inputs////outputs
 const reviewInput = document.getElementById('review');
 const rateInput = document.getElementById('rate');
 //const userNumberInput = document.getElementById('traveller_id');
@@ -17,20 +17,25 @@ const placeInput = document.getElementById('place_name');
 const placeNumberInput = document.getElementById('place_id');
 
 const placeCreate = document.getElementById('create-place');
+const getRate = document.getElementById('get-rate');
+
+const reviewOutput = document.getElementById('show');
 
 ////forms///
 const placeSearchInput = document.getElementById('search-place');
 const reviewForm = document.getElementById('review-form');
 const searchInputForm = document.getElementById('search-input');
 
-const createPlaceForm = document.getElementById('form-create-place')
+const createPlaceForm = document.getElementById('form-create-place');
+//const getRateForm = document.getElementById('form-get-rate');//
+
 
 ///buttons///
 const reviewShowBtn = document.getElementById('show-review');
 const rateShowBtn = document.getElementById('show-rate');
 
 
-const reviewOutput = document.getElementById('show');
+
 
 /////create new place - test/////////////
 createPlaceForm.addEventListener('submit', (e) => {
@@ -73,14 +78,17 @@ const postPlace = (place) =>
 
 //////////create new place - test >>>>>>>
 
-//////////search bar and get ///////
+//////////search bar for place and get average review rate ///////
 searchInputForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
   var findPlace = placeSearchInput.value.trim();
   console.log("place to find: " + findPlace);
   getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
+
+  getRateAve(findPlace).then((response) => {if(response.place_name === findPlace){renderRateAve(response.AveRate)}});
   });
 
+        //////// place  
 const getPlaceReviews = async (findPlace) => {
   const result = await fetch(`/api/reviews/${findPlace}`, {
     method: 'GET',
@@ -89,6 +97,26 @@ const getPlaceReviews = async (findPlace) => {
   const json = await result.json();
   //console.log(json);
   return json;
+};
+
+
+        /////average review rate
+const getRateAve = async (findPlace) => {
+  const result = await fetch(`/api/reviews/${findPlace}/rate`, {
+    method: 'GET',
+  });
+  const json = await result.json();
+  console.log("await for the rate");
+  console.log(json);
+  return json;
+};
+
+
+const renderRateAve = () => {
+  const sqlRate = document.createElement('par');
+  console.log(sqlRate);
+  sqlRate.innerText = response;
+  getRate.appendChild(sqlRate);
 };
 
 //////////search bar >>>>>>>>
@@ -196,6 +224,10 @@ const getAndRender = () =>
 reviewShowBtn.addEventListener('click', getAndRender);
 
 /////render ALL existing reviews >>>>>>>>>>>>>>>.
+
+
+
+
 };
 
 submitReview();
