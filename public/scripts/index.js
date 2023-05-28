@@ -1,6 +1,9 @@
 
 var timeStamp = dayjs().format('D.MMMM.YYYY_H:mm');
 console.log(timeStamp);
+var rateAve = "";
+var findPlace = "";
+var placeRateId = "";
 
 function submitReview(){
 
@@ -11,9 +14,7 @@ function submitReview(){
 ///inputs////outputs
 const reviewInput = document.getElementById('review');
 const rateInput = document.getElementById('rate');
-//const userNumberInput = document.getElementById('traveller_id');
 const placeInput = document.getElementById('place_name');
-
 const placeNumberInput = document.getElementById('place_id');
 
 const placeCreate = document.getElementById('create-place');
@@ -27,7 +28,7 @@ const reviewForm = document.getElementById('review-form');
 const searchInputForm = document.getElementById('search-input');
 
 const createPlaceForm = document.getElementById('form-create-place');
-//const getRateForm = document.getElementById('form-get-rate');//
+
 
 
 ///buttons///
@@ -81,12 +82,12 @@ const postPlace = (place) =>
 //////////search bar for place and get average review rate ///////
 searchInputForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
-  var findPlace = placeSearchInput.value.trim();
+  findPlace = placeSearchInput.value.trim();
   console.log("place to find: " + findPlace);
   getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
-
-  getRateAve(findPlace).then((response) => {if(response.place_name === findPlace){renderRateAve(response.AveRate)}});
+  getRateAve(findPlace);
   });
+
 
         //////// place  
 const getPlaceReviews = async (findPlace) => {
@@ -95,29 +96,42 @@ const getPlaceReviews = async (findPlace) => {
   });
 
   const json = await result.json();
-  //console.log(json);
   return json;
 };
-
+//// place >>>>>
 
         /////average review rate
 const getRateAve = async (findPlace) => {
-  const result = await fetch(`/api/reviews/${findPlace}/rate`, {
-    method: 'GET',
+  fetch(`/api/reviews/${findPlace}/rate`)
+    .then(function(response){
+      return response.json();
+      })
+    .then(function(output){console.log( "output" , output )
+        for (var i=0; i < 20; i++){
+          var placeRate = output[i].place_name;
+          if (placeRate === findPlace){
+              var AverageRate = {
+                rateAve: output[i].AveRate,
+                placeRateId: output[i].place_id,
+              }
+              console.log(AverageRate.rateAve);
+              console.log(placeRate);
+       //   localStorage.setItem("rates", JSON.stringify(AverageRate));
+
+        
+       const sqlRate = document.createElement('p');
+              //classList.add
+
+       sqlRate.textContent = placeRate + " Average Reviews Rate " + AverageRate.rateAve;
+       console.log(sqlRate);
+       getRate.appendChild(sqlRate);
+      } 
+              } ;
+          
   });
-  const json = await result.json();
-  console.log("await for the rate");
-  console.log(json);
-  return json;
 };
 
-
-const renderRateAve = () => {
-  const sqlRate = document.createElement('par');
-  console.log(sqlRate);
-  sqlRate.innerText = response;
-  getRate.appendChild(sqlRate);
-};
+//// review >>>>>
 
 //////////search bar >>>>>>>>
 

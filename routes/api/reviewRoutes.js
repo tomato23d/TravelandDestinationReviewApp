@@ -13,9 +13,7 @@ router.post('/', async (req, res) => {
     const placeInput = await Place.findOne({
       where: {place_name: req.body.place_name}
     });
-    //console.log(placeInput);
     const placeInputPlain = placeInput.get({plain:true});
-   // console.log(placeInputPlain);
     const reviewData = await Review.create({
       place_id: placeInputPlain.id,
       review_text: req.body.review_text,
@@ -65,7 +63,7 @@ router.get('/:place', async (req, res) => {
 router.get('/:place/rate', async (req, res) => {
   try{
   const rates = await sequelize.query('SELECT distinct(review.place_id), place.place_name, avg(review.rate) as AveRate FROM review, place where review.place_id = place.id group by review.place_id;', 
-  { type: sequelize.QueryTypes.SELECT });
+  { type: sequelize.QueryTypes.SELECT }); 
   res.status(200).json(rates);
 } catch (err) {
   res.status(500).json(err);
