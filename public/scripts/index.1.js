@@ -1,11 +1,8 @@
-
 var timeStamp = dayjs().format('D.MMMM.YYYY_H:mm');
 console.log(timeStamp);
 var rateAve = "";
 var findPlace = "";
 var placeRateId = "";
-var CNP = 0;
-
 
 function submitReview(){
 
@@ -85,7 +82,7 @@ const postPlace = (place) =>
 searchInputForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
   findPlace = placeSearchInput.value.trim();
-  ////console.log("place to find: " + findPlace);
+  console.log("place to find: " + findPlace);
   getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
   getRateAve(findPlace);
   });
@@ -108,18 +105,16 @@ const getRateAve = async (findPlace) => {
     .then(function(response){
       return response.json();
       })
-
-      ///
     .then(function(output){console.log( "output" , output )
-        for (var i=0; i < output.length; i++){
+        for (var i=0; i < 20; i++){
           var placeRate = output[i].place_name;
           if (placeRate === findPlace){
               var AverageRate = {
                 rateAve: output[i].AveRate,
                 placeRateId: output[i].place_id,
               }
-              // console.log(AverageRate.rateAve);
-              // console.log(placeRate);
+              console.log(AverageRate.rateAve);
+              console.log(placeRate);
        //   localStorage.setItem("rates", JSON.stringify(AverageRate));
 
         
@@ -127,7 +122,7 @@ const getRateAve = async (findPlace) => {
               //classList.add
 
        sqlRate.textContent = placeRate + " Average Reviews Rate " + AverageRate.rateAve;
-      
+       console.log(sqlRate);
        getRate.appendChild(sqlRate);
       } 
               } ;
@@ -151,66 +146,55 @@ const postReview = (review) =>
     body: JSON.stringify(review),
   })
     .then((res) => res.json())
-
-
-  const getPlace = async (cPlace) => {
-    fetch(`/api/places/`)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (placesDB) {
-        console.log("places_DB", placesDB)
-        var placesArray = [];
-       // console.log(CNP);
-        for (var i = 0; i < placesDB.length; i++) {
-          var placeName = placesDB[i].place_name;
-          placesArray.push(placeName)
-        };
-        console.log(placesArray);
-        // console.log("cPlace:  " + cPlace);
-        // console.log(cPlace = "Showground")
-        const AA = placesArray.includes(`${cPlace}`)
-        // console.log(placesArray.includes(`${cPlace}`))
-        console.log(AA);
-        if(!AA){
-            console.log("will post place");
-            
-            const newPlace = {
-              place_name: cPlace,
-              place_url: "www.google.com",
-              place_type: "active"
-              };
-            postPlace(newPlace);
-            
-        }else{
-        return
-         
-        }
-       } );
-  };
+    .then((data) => {
+      console.log('Successful POST Review request:', data);
+      return data;
+    })
+    .catch((error) => {
+      console.error('Error in POST request:', error);
+    });
 
 // Submit the form with the new review record
 reviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-   
-   var cPlace = placeInput.value.trim();
-   console.log(cPlace);
-   console.log(CNP);
- 
-  getPlace(cPlace);
+//   var cPlace = placeInput.value.trim();
+// //// check if placeInput exists in Place Model
+// // if yes - go to const newReview
+// // if no - run postPlace and return
+//   console.log("line 123: " + cPlace);
 
-    const newReview = {
+// // query Place model with the place input
+//  const getPlace = async (cPlace) => {
+//   const result = await fetch(`/api/places/${cPlace}`, {
+//     method: 'GET',
+//   });
+
+//   const json = await result.json();
+//   console.log(json);
+//   var cPlaceDB = place_name.value.trim();
+//   console.log(cPlaceDB);
+//   return json;
+// };
+// // match place input with get place from DB 
+// if(cPlace != cPlaceDB){postPlace(cPlace)};
+
+
+  const newReview = {
     review_text: reviewInput.value.trim(),
     rate: parseInt(rateInput.value.trim()),
+    //traveller_id: userNumberInput.value.trim(),
     traveller_id: 1,
+    //place_id: 5,
     place_name: placeInput.value.trim(),
   };
 
   //console.log(newReview);
 
   postReview(newReview)
-
+ // getPlace(cPlace);
+   
+    //localStorage.setItem(timeStamp, JSON.stringify(newReview));
 });
 
 /////////// post review on form >>>>>>>>>>>>>>>
@@ -221,7 +205,7 @@ const getReviews = async () => {
     method: 'GET',
   });
   const json = await result.json();
-  ////console.log(json);
+  console.log(json);
   return json;
 };
 
