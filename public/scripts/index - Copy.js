@@ -6,26 +6,54 @@ var placeRateId = "";
 
 function submitReview(){
 
-///inputs///outputs
+//const userNameInput = document.getElementById('traveller');
+//const userEmailInput = document.getElementById('traveller_email');
+
+
+///inputs////outputs
 const reviewInput = document.getElementById('review');
 const rateInput = document.getElementById('rate');
 const placeInput = document.getElementById('place_name');
+const placeNumberInput = document.getElementById('place_id');
 
+const placeCreate = document.getElementById('create-place');
 const getRate = document.getElementById('get-rate');
 
 const reviewOutput = document.getElementById('show');
 
-///forms///
+////forms///
 const placeSearchInput = document.getElementById('search-place');
 const reviewForm = document.getElementById('review-form');
 const searchInputForm = document.getElementById('search-input');
+
+const createPlaceForm = document.getElementById('form-create-place');
+
 
 
 ///buttons///
 const reviewShowBtn = document.getElementById('show-review');
 const rateShowBtn = document.getElementById('show-rate');
 
-//////// call the route to create a new place for review
+
+
+
+/////create new place - test/////////////
+// createPlaceForm.addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   var placeCreated = placeCreate.value.trim();
+
+
+//     const newPlace = {
+//       place_name: placeCreated,
+//       place_url: "www.google.com",
+//       place_type: "active"
+// };
+// console.log("place to create: " + newPlace);
+
+// postPlace(newPlace);
+// })
+
+
 const postPlace = (newPlace) =>{
       // const newPlace = {
       // place_name: placeCreated,
@@ -48,19 +76,21 @@ const postPlace = (newPlace) =>{
     // .catch((error) => {
     //   console.error('Error in POST request:', error);
 
-////////create new place_end >>>>>>>
 
-////////search bar for place and get average review rate
+
+//////////create new place - test >>>>>>>
+
+//////////search bar for place and get average review rate ///////
 searchInputForm.addEventListener('submit', (e) => {
-      e.preventDefault(); 
-      findPlace = placeSearchInput.value.trim();
-      //console.log("place to find: " + findPlace);
-      getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
-      getRateAve(findPlace);
-     });
+    e.preventDefault(); 
+  findPlace = placeSearchInput.value.trim();
+  console.log("place to find: " + findPlace);
+  getPlaceReviews(findPlace).then((response) => response.forEach((id) => renderReviews(id)));
+  getRateAve(findPlace);
+  });
 
 
-        //////// render reviews for selected place  
+        //////// place  
 const getPlaceReviews = async (findPlace) => {
   const result = await fetch(`/api/reviews/${findPlace}`, {
     method: 'GET',
@@ -69,10 +99,9 @@ const getPlaceReviews = async (findPlace) => {
   const json = await result.json();
   return json;
 };
+//// place >>>>>
 
-        //////// render reviews for selected place_end >>>>>>>  
-
-        //////// render average review rate for selected place
+        /////average review rate
 const getRateAve = async (findPlace) => {
   fetch(`/api/reviews/${findPlace}/rate`)
     .then(function(response){
@@ -86,15 +115,14 @@ const getRateAve = async (findPlace) => {
                 rateAve: output[i].AveRate,
                 placeRateId: output[i].place_id,
               }
-            
-         localStorage.setItem("rates", JSON.stringify(AverageRate));
-         var readRate = JSON.parse(localStorage.getItem("rates"));
-         //console.log(readRate.rateAve);
+              console.log(AverageRate.rateAve);
+              console.log(placeRate);
+       //   localStorage.setItem("rates", JSON.stringify(AverageRate));
 
         
        const sqlRate = document.createElement('p');
-              //classList.add..jumbotron3
-       sqlRate.classList.add('jumbotron4');
+              //classList.add
+
        sqlRate.textContent = placeRate + " Average Reviews Rate " + AverageRate.rateAve;
        console.log(sqlRate);
        getRate.appendChild(sqlRate);
@@ -103,47 +131,32 @@ const getRateAve = async (findPlace) => {
           
   });
 };
-     //////// render average review rate for selected place_end >>>>>>
 
-  //////// render for selected place_end >>>>>>>  
+//// review >>>>>
 
+//////////search bar >>>>>>>>
 
+/////////// post review on form //////////////
 
-/////// post review on the form 
-
-      /////// Review post to EXISTING place route
 const postReview = (review) =>
   
   fetch('/api/reviews', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json',},
-    body: JSON.stringify(review)})
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(review),
+  })
     .then((res) => res.json())
-    .then((data) => {console.log('Successful POST Review request:', data);
+    .then((data) => {
+      console.log('Successful POST Review request:', data);
       return data;
     })
-    .catch((error) => {console.error('Error in POST request:', error);
+    .catch((error) => {
+      console.error('Error in POST request:', error);
     });
-      /////// Review post to EXISTING place route_end >>>>>>>
 
-      /////// Review post to NEW place route
-      const postReviewPlace = (reviewplace) =>
-  
-      fetch('/api/reviews/newplace', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(reviewplace)})
-        .then((res) => res.json())
-        .then((data) => {console.log('Successful POST Review request:', data);
-          return data;
-        })
-        .catch((error) => {console.error('Error in POST request:', error);
-        });
-          /////// Review post to NEW place route_end >>>>>>>
-
-
-
-      /////// validate if existing place and post if doesn't exists
+    /// get a place and post if doesn't exists
     const getPlace = async (cPlace) => {
       fetch(`/api/places/`)
         .then(function (response) {
@@ -164,64 +177,46 @@ const postReview = (review) =>
           console.log(AA);
           if(!AA){
               
-            const newReviewPlace = JSON.parse(localStorage.getItem("newReview"));
-            console.log("newReviewPlace : " + newReviewPlace);
-              // const newReviewPlace = {
-              //   place_name: cPlace,
-              //   place_url: "www.google.com",
-              //   place_type: "active",
-              //   review_text: 
-              //   rate: 
-              //   traveller_id: 
-
-              //   };
+              const newPlace = {
+                place_name: cPlace,
+                place_url: "www.google.com",
+                place_type: "active"
+                };
   
-              postReviewPlace(newReviewPlace);
-          };  
-          const newReview = JSON.parse(localStorage.getItem("newReview"));
-          console.log("newReview " + newReview );
-
-          // const newReview = {
-          //   place_name: cPlace,
+              postPlace(newPlace);
+       
+          };
+     
            
-          //   review_text: 
-          //   rate: 
-          //   traveller_id: 
-
-          //   };
-
-          postReview(newReview);
           })
          };
 
-      /////// validate if existing place_end >>>>>
 
 
-    //////// Submit the new  review form 
+
+// Submit the form with the new review record
 reviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   var cPlace = placeInput.value.trim();
-    const newReview = {
+  const newReview = {
     review_text: reviewInput.value.trim(),
     rate: parseInt(rateInput.value.trim()),
     traveller_id: 1,
     place_name: cPlace,
-    place_url: "www.google.com",
-    place_type: "active"
   };
 
-  /// set item at timeStamp and traveller login
-  localStorage.setItem("newReview", JSON.stringify(newReview));
-  //postReview(newReview)
-    getPlace(cPlace);
+  //console.log(newReview);
+
+  postReview(newReview)
+ // getPlace(cPlace);
    
- 
+    //localStorage.setItem(timeStamp, JSON.stringify(newReview));
 });
 
-    //////// Submit the new  review form_end  >>>>>>>>>>>>>>>
+/////////// post review on form >>>>>>>>>>>>>>>
 
-//////// render ALL existing reviews 
+/////render ALL existing reviews ////
 const getReviews = async () => {
   const result = await fetch('/api/reviews', {
     method: 'GET',
@@ -230,6 +225,8 @@ const getReviews = async () => {
   console.log(json);
   return json;
 };
+
+
 
 const renderReviews = (id) => {
     const review = document.createElement('td');
@@ -250,12 +247,16 @@ const renderReviews = (id) => {
   
 };
 
+
 const getAndRender = () =>
   getReviews().then((response) => response.forEach((id) => renderReviews(id)));
 
 reviewShowBtn.addEventListener('click', getAndRender);
 
-//////// render ALL existing reviews_end  >>>>>>>>>>>>>>
+/////render ALL existing reviews >>>>>>>>>>>>>>>.
+
+
+
 
 };
 

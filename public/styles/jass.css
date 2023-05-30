@@ -1725,6 +1725,16 @@ label form [type='radio'] {
   justify-content: center;
 }
 
+.jumbotron3 {
+  background-color: #2d3e50;
+  color: #d9e9e8;
+  text-align: center;
+}
+
+.jumbotron4 {
+  font-style: italic;
+  font-size: large;
+}
 .code {
   font-family: monospace;
 }
