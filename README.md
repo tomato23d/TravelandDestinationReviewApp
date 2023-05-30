@@ -1,17 +1,25 @@
 # TravelandDestinationReviewApp
 
+ 
+## application description as it is
 
-## app in development
+The application is in the development to provide traveller reviews for city attractions and various tourist activities.
 
-## completed:
-routes, sequelizer model with three tables
+The application currently provides with search engine on existing reviews accompanied by average rating.
+
+Reviews can be posted and viewed. Charting on popularity of various places is under development (Rates tab).
+
 
 ## available for demo
-post a new review,
-get an existing review with the search by destination place (city or else)
+
+post a new review;
+
+get an existing review with the search by destination place.
+
+Please refer to the ReadmeandImages.pdf file for images of functionality.
 
 
 ## outstanding:
 
-application of recently learned technologies: handlebars, manage user sessions etc
+application of recently learned technologies of handlebars and management of user sessions.
 
