@@ -10,17 +10,26 @@ const { Review, Place, Traveller } = require('../../models');
 /// create review 
 router.post('/', async (req, res) => {
   try {
-    const placeInput = await Place.findOne({
-      where: {place_name: req.body.place_name}
+    let placeInput = await Place.findOne({
+        where: {place_name: req.body.place_name}
     });
-    const placeInputPlain = placeInput.get({plain:true});
+    if (placeInput === null){
+        placeInput = await Place.create({
+        place_name: req.body.place_name,
+        place_url: req.body.place_url,
+        place_type: req.body.place_type
+      });
+    }
+  //  else
+   // {
+   // const placeInputPlain = placeInput.get({plain:true});
     const reviewData = await Review.create({
-      place_id: placeInputPlain.id,
-      review_text: req.body.review_text,
-      rate: req.body.rate,
-      traveller_id: 1
-    });
-    res.status(200).json(reviewData);
+        place_id: placeInput.id,
+        review_text: req.body.review_text,
+        rate: req.body.rate,
+        traveller_id: 1
+      });
+      res.status(200).json(reviewData);
     } catch (err) {
       res.status(400).json(err);
     }
@@ -69,27 +78,5 @@ router.get('/:place/rate', async (req, res) => {
 }
 });
 
-
-/// create both new place and review 
-
-router.post('/newplace', async (req, res) => {
-  try {
-    const Newplace = Review.belongsTo(Place, {as: 'place'});
-
-    Review.create({
-      review_text: req.body.review_text,
-      rate: req.body.rate,
-      traveller_id: 1,
-      place: {  place_name: req.body.place_name,
-                  place_url: req.body.place_url,
-                  place_type: req.body.place_type
-              }
-    }, {include: [Newplace]});
-    res.status(200).json(Newplace);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-  });
- 
 
 module.exports = router;

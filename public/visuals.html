@@ -33,6 +33,19 @@
           ["Luna Park", 2.5]
         
         ]);
+      // var arrayJson => const getReviews = async () => arrayJson.push(result.json) =>   data.addRows([arrayJson]);
+      //https://stackoverflow.com/questions/14528385/how-to-convert-json-object-to-javascript-array
+      {
+          const result = await fetch('/api/reviews', {
+            method: 'GET',
+          });
+          const json = await result.json();
+          console.log(json);
+          return json;
+        };
+        getReviews();
+
+     
 
         // Set chart options
         var options = {'title':'Places Reviews Rated',
