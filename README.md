@@ -18,8 +18,3 @@ get an existing review with the search by destination place.
 
 Please refer to the ReadmeandImages.pdf file for images of functionality.
 
-
-## outstanding:
-
-application of recently learned technologies of handlebars and management of user sessions.
-
